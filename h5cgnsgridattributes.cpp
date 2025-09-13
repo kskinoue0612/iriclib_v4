@@ -52,6 +52,19 @@ int readDataArray(hid_t groupId, const std::string& name, const std::string& val
 
 	H5GroupCloser closer(gId);
 
+	std::unordered_set<std::string> tmpNames;
+	_IRIC_LOGGER_TRACE_CALL_START("H5Util::getGroupNames");
+	ier = H5Util::getGroupNames(gId, &tmpNames);
+	_IRIC_LOGGER_TRACE_CALL_END_WITHVAL("H5Util::getGroupNames", ier);
+	RETURN_IF_ERR;
+
+	if (tmpNames.find(valName) == tmpNames.end()) {
+		std::ostringstream ss;
+		ss << "In readDataArray(), data with name " << valName << " does not exist";\
+		_iric_logger_error(ss.str());\
+		return IRIC_DATA_NOT_FOUND;\
+	}
+
 	_IRIC_LOGGER_TRACE_CALL_START("H5Util::readDataArrayValue");
 	ier = H5Util::readDataArrayValue(gId, valName, values);
 	_IRIC_LOGGER_TRACE_CALL_END_WITHVAL("H5Util::readDataArrayValue", ier);
@@ -69,6 +82,19 @@ int readDataArray(hid_t groupId, const std::string& name, const std::string& val
 	RETURN_IF_ERR;
 
 	H5GroupCloser closer(gId);
+
+	std::unordered_set<std::string> tmpNames;
+	_IRIC_LOGGER_TRACE_CALL_START("H5Util::getGroupNames");
+	ier = H5Util::getGroupNames(gId, &tmpNames);
+	_IRIC_LOGGER_TRACE_CALL_END_WITHVAL("H5Util::getGroupNames", ier);
+	RETURN_IF_ERR;
+
+	if (tmpNames.find(valName) == tmpNames.end()) {
+		std::ostringstream ss;
+		ss << "In readDataArray(), data with name " << valName << " does not exist";\
+		_iric_logger_error(ss.str());\
+		return IRIC_DATA_NOT_FOUND;\
+	}
 
 	_IRIC_LOGGER_TRACE_CALL_START("H5Util::readDataArrayValue");
 	ier = H5Util::readDataArrayValue(gId, valName, values);
