@@ -17,7 +17,7 @@ env:
   # GENERATOR_NO_QUOTES: Visual Studio 17 2022
   # SGEN: vs2019-x64
   # IFORT_COMPILER21: C:\Program Files (x86)\Intel\oneAPI\compiler\2021.2.0\windows\
-  GENERATOR: Ninja Multi-Config
+  GENERATOR: 'Visual Studio 17 2022'
   SGEN: ninja-x64
   PYTHON_INSTALL_DIR: C:\Python-x64
   PYTHON_VERSION: 3.12.4
