@@ -46,7 +46,7 @@ jobs:
       - name: Setup path for msbuild
         uses: microsoft/setup-msbuild@v2
         with:
-          vs-version: '[16.9,17)'
+          vs-version: '[17.10,18)'
 
       - name: Cache hdf5
         id: cache-hdf5
@@ -87,7 +87,7 @@ jobs:
       - name: Setup path for msbuild
         uses: microsoft/setup-msbuild@v2
         with:
-          vs-version: '[16.9,17)'
+          vs-version: '[17.10,18)'
 
       - name: Cache poco
         id: cache-poco
