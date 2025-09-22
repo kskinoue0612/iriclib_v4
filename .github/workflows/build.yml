@@ -13,8 +13,8 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   # BUILD_TYPE: Release
-  # GENERATOR: 'Visual Studio 16 2019'
-  # GENERATOR_NO_QUOTES: Visual Studio 16 2019
+  # GENERATOR: 'Visual Studio 16 2022'
+  # GENERATOR_NO_QUOTES: Visual Studio 17 2022
   # SGEN: vs2019-x64
   # IFORT_COMPILER21: C:\Program Files (x86)\Intel\oneAPI\compiler\2021.2.0\windows\
   GENERATOR: Ninja Multi-Config
@@ -61,14 +61,14 @@ jobs:
         run: |
           curl -fSLo ${{ env.WINDOWS_HPCKIT_FILE }} ${{ env.WINDOWS_HPCKIT_URL }}
           start /b /wait ${{ env.WINDOWS_HPCKIT_FILE }} -s -x -f hpckit_extracted --log hpckit_extracted.log
-          hpckit_extracted\bootstrapper.exe -s --action install --components=${{ env.WINDOWS_HPCKIT_COMPONENTS }} --eula=accept -p=NEED_VS2017_INTEGRATION=0 -p=NEED_VS2019_INTEGRATION=1 -p=NEED_VS2022_INTEGRATION=0 --log-dir=.
+          hpckit_extracted\bootstrapper.exe -s --action install --components=${{ env.WINDOWS_HPCKIT_COMPONENTS }} --eula=accept -p=NEED_VS2017_INTEGRATION=0 -p=NEED_VS2019_INTEGRATION=0 -p=NEED_VS2022_INTEGRATION=1 --log-dir=.
 
       - name: Build hdf5
         if: steps.cache-hdf5.outputs.cache-hit != 'true'
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat" intel64 vs2019
-          REM call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat" intel64 vs2022
+          REM call "C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           msbuild /noLogo /maxCpuCount /target:hdf5-build iricdev.proj
 
   cache-poco:
@@ -100,7 +100,7 @@ jobs:
         if: steps.cache-poco.outputs.cache-hit != 'true'
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           msbuild /noLogo /maxCpuCount /target:poco-build iricdev.proj
 
   build-iriclib:
@@ -208,36 +208,36 @@ jobs:
       - name: Configure iriclib
         run: |
           Set-Location lib/src/iriclib-git
-          cmake --preset vs2019_no_fortran -DPython_ROOT_DIR=${{ env.PYTHON_INSTALL_DIR }} -DPython_FIND_STRATEGY=LOCATION
+          cmake --preset vs2022_no_fortran -DPython_ROOT_DIR=${{ env.PYTHON_INSTALL_DIR }} -DPython_FIND_STRATEGY=LOCATION
 
       - name: Build iriclib debug
         run: |
           Set-Location lib/src/iriclib-git
-          cmake --build --preset vs2019_no_fortran --config debug
+          cmake --build --preset vs2022_no_fortran --config debug
 
       - name: Build iriclib release
         run: |
           Set-Location lib/src/iriclib-git
-          cmake --build --preset vs2019_no_fortran --config release
+          cmake --build --preset vs2022_no_fortran --config release
 
       - name: Test iriclib debug
         run: |
           Set-Location lib/src/iriclib-git
-          ctest --preset vs2019_no_fortran --build-config debug
+          ctest --preset vs2022_no_fortran --build-config debug
 
       - name: Test iriclib release
         run: |
           Set-Location lib/src/iriclib-git
-          ctest --preset vs2019_no_fortran --build-config release
+          ctest --preset vs2022_no_fortran --build-config release
 
       - name: Install iriclib debug
         run: |
-          Set-Location lib/src/iriclib-git/_vs2019_no_fortran
+          Set-Location lib/src/iriclib-git/_vs2022_no_fortran
           cmake --install . --config debug --prefix ..\..\..\install\iriclib-$env:IRICLIB_VER\
 
       - name: Install iriclib release
         run: |
-          Set-Location lib/src/iriclib-git/_vs2019_no_fortran
+          Set-Location lib/src/iriclib-git/_vs2022_no_fortran
           cmake --install . --config release --prefix ..\..\..\install\iriclib-$env:IRICLIB_VER\
 
       - name: Upload artifact (user forks and pull requests)
