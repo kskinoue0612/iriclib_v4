@@ -32,7 +32,7 @@ jobs:
 
   cache-hdf5:
   # 32m 44s
-    runs-on: windows-2019
+    runs-on: windows-2022
 
     steps:
       - name: Checkout iricdev
@@ -73,7 +73,7 @@ jobs:
 
   cache-poco:
   # 12m 2s
-    runs-on: windows-2019
+    runs-on: windows-2022
 
     steps:
       - name: Checkout iricdev
@@ -104,7 +104,7 @@ jobs:
           msbuild /noLogo /maxCpuCount /target:poco-build iricdev.proj
 
   build-iriclib:
-    runs-on: windows-2019
+    runs-on: windows-2022
     needs: [cache-hdf5, cache-poco]
 
     steps:
